@@ -1,0 +1,38 @@
+[
+  {
+    "id": "f762964a-45da-469e-95b8-b93a3b1762d3",
+    "title": "Corona 710ML",
+    "description": "Cerveza Corona 710ML",
+    "code": "a12341234",
+    "price": 3500,
+    "status": true,
+    "stock": 30,
+    "category": "Cerveza",
+    "thumbnails": "http://images.com/1.jpg"
+  },
+  {
+    "id": "4ef6954f-ce14-4dda-84ac-b6b20dcdeac3",
+    "title": "Corona 750ML",
+    "description": "Cerveza Corona 750ML",
+    "code": "a33323234",
+    "price": 3700,
+    "status": true,
+    "stock": 35,
+    "category": "Cerveza",
+    "thumbnails": "http://images.com/1.jpg"
+  },
+  {
+    "id": "6d422749-569d-48ff-9b24-32aa51f62c75",
+    "title": "Corona 1L",
+    "description": "Cerveza Corona 1L",
+    "code": "a33323239",
+    "price": 4300,
+    "status": true,
+    "stock": 10,
+    "category": "Cerveza",
+    "thumbnails": [
+      "http://images.com/3.jpg",
+      "http://images.com/4.jpg"
+    ]
+  }
+]
