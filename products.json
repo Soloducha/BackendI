@@ -34,5 +34,15 @@
       "http://images.com/3.jpg",
       "http://images.com/4.jpg"
     ]
+  },
+  {
+    "id": "262cff7c-4238-452d-96ba-7df16e3f07ae",
+    "title": "Fernet Branca 750ML",
+    "description": "Aperitivo Fernet Branca 750ML",
+    "price": 6000,
+    "code": "F23478623",
+    "stock": 100,
+    "status": true,
+    "category": "Aperitivos"
   }
 ]

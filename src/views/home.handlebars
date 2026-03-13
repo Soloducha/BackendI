@@ -1,0 +1,65 @@
+<h1 class="title">Lista de Productos</h1>
+{{#each products}}
+  <div class="product">
+    <h2 class="productName">{{this.title}}</h2>
+    <p class="productDescription">Descripcion: {{this.description}}</p>
+    <p class="productCode">Codigo: {{this.code}}</p>
+    <p class="productPrice">Precio: ${{this.price}}</p>
+    <p class="productStatus">Status: {{this.status}}</p>
+    <p class="productStock">Stock: {{this.stock}}</p>
+    <p class="productCategory">Categoria: {{this.category}}</p>
+  </div>
+{{/each}}
+
+<style>
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: black;
+  }
+
+  .product {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    width: 400px;
+    text-items: center;
+  }
+
+  .productName {
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+    color: black;
+  }
+
+  .productDescription {
+    font-size: 1rem;
+    color: black;
+  }
+
+  .productCode {
+    font-size: 1rem;
+    color: gray;
+  }
+
+  .productPrice {
+    font-size: 1rem;
+    color: green;
+  }
+
+  .productStatus {
+    font-size: 1rem;
+    color: blue;
+  }
+
+  .productStock {
+    font-size: 1rem;
+    color: orange;
+  }
+
+  .productCategory {
+    font-size: 1rem;
+    color: purple;
+    margin-bottom: 0.2rem;
+  }
+</style>

@@ -85,6 +85,25 @@ class ProductManager {
       return false;
     }
   };
+
+  //eliminar el producto con el code indicado
+  deleteProductByCode = async (code) => {
+    try {
+      const products = await this.getProducts();
+      const productIndex = products.findIndex(
+        (product) => product.code === code,
+      );
+      if (productIndex === -1) {
+        return null; // Si no se encuentra el producto, devuelve null
+      }
+      products.splice(productIndex, 1); // Elimina el producto del array
+      await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2));
+      return true; // Devuelve true si se eliminó correctamente
+    } catch (error) {
+      console.error("Error al eliminar el producto por código:", error);
+      return false;
+    }
+  };
 }
 
 export const productManager = new ProductManager("./products.json"); // Exporta una instancia de ProductManager con la ruta del archivo de productos.
