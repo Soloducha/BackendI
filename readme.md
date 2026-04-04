@@ -1,19 +1,18 @@
 # 🛒 E-Commerce Backend — Leandro Soloducha
 
-Proyecto final del curso **Backend I** de CoderHouse. API REST para gestión de productos y carritos de compra, con vistas renderizadas en Handlebars, persistencia en MongoDB y actualizaciones en tiempo real con Socket.io.
+Proyecto final del curso **Backend I** de CoderHouse. API REST para gestión de productos y carritos de compra, con vistas renderizadas en Handlebars, persistencia en MongoDB.
 
 ---
 
 ## 🚀 Tecnologías utilizadas
 
-| Librería             | Versión | Uso                            |
-| -------------------- | ------- | ------------------------------ |
-| Express              | ^5.2.1  | Servidor HTTP y routing        |
-| Express-Handlebars   | ^8.0.6  | Motor de plantillas            |
-| Mongoose             | ^9.3.1  | ODM para MongoDB               |
-| Mongoose-Paginate-v2 | ^1.9.4  | Paginación de productos        |
-| Socket.io            | ^4.8.3  | Actualizaciones en tiempo real |
-| dotenv               | ^17.4.0 | Variables de entorno           |
+| Librería             | Versión | Uso                     |
+| -------------------- | ------- | ----------------------- |
+| Express              | ^5.2.1  | Servidor HTTP y routing |
+| Express-Handlebars   | ^8.0.6  | Motor de plantillas     |
+| Mongoose             | ^9.3.1  | ODM para MongoDB        |
+| Mongoose-Paginate-v2 | ^1.9.4  | Paginación de productos |
+| dotenv               | ^17.4.0 | Variables de entorno    |
 
 ---
 
@@ -85,7 +84,6 @@ src/
 │   ├── product-detail.handlebars
 │   └── cart.handlebars
 ├── public/
-│   └── index.js               # Lógica cliente (Socket.io)
 └── server.js
 ```
 
