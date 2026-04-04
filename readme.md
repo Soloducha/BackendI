@@ -1,13 +1,15 @@
 Leandro Soloducha
 Backend I
 
-se utilizaron las librerias uuid, express, express-handlebars y socket.io:
-'npm install uuid'
+se utilizaron las librerias dotenv, express, express-handlebars, socket.io, mongoose y mongoose-paginate-v2:
+'npm install dotenv'
 'npm install express'
 'npm install express-handlebars'
 'npm install socket.io'
+'npm install mongoose'
+'npm install mongoose-paginate-v2'
 o
-'npm i uuid express express-handlebars socket.io'
+'npm i dotenv express express-handlebars socket.io mongoose mongoose-paginate-v2'
 
 para Ejecutar:
 'npm start'

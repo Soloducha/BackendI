@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "python.terminal.useEnvFile": true,
   "scripts": {
     "start": "node src/server.js",
     "watch": "node --watch src/server.js",
@@ -13,8 +14,11 @@
   "author": "Leandro Soloducha",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.4.0",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.6",
+    "mongoose": "^9.3.1",
+    "mongoose-paginate-v2": "^1.9.4",
     "socket.io": "^4.8.3",
     "uuid": "^13.0.0"
   }

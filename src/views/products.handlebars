@@ -1,0 +1,630 @@
+<div class="products-container">
+  <h1 class="title">Catálogo de Productos</h1>
+
+    <!-- Paginación de productos -->
+    <div class="pagination-container">
+      <div class="pagination-info">
+        <p>Página <strong>{{currentPage}}</strong> de <strong>{{totalPages}}</strong></p>
+      </div>
+      
+      <div class="pagination-controls">
+        {{#if hasPrevPage}}
+          <a href="{{prevPage}}" class="btn-page">← Anterior</a>
+        {{else}}
+          <button class="btn-page" disabled>← Anterior</button>
+        {{/if}}
+
+            <div class="page-numbers">
+            {{#each (range 1 totalPages)}}
+                {{#ifEqual this ../currentPage}}
+                <span class="page-number active">{{this}}</span>
+                {{else}}
+                <a href="/api/products?limit={{../currentLimit}}&page={{this}}&sort={{../currentSort}}" class="page-number">{{this}}</a>
+                {{/ifEqual}}
+            {{/each}}
+
+        {{#if hasNextPage}}
+          <a href="{{nextPage}}" class="btn-page">Siguiente →</a>
+        {{else}}
+          <button class="btn-page" disabled>Siguiente →</button>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- Control de límite -->
+    <div class="limit-control">
+    <form class="limit-form" method="GET" action="/api/products">
+        <input type="hidden" name="page" value="{{currentPage}}" />
+        <input type="hidden" name="sort" value="{{currentSort}}" />
+        <label for="limit">Mostrar:</label>
+        <input type="number" id="limit" name="limit" value="{{currentLimit}}" min="4" max="100" placeholder="{{currentLimit}}" />
+        <span>productos por página</span>
+        <button type="submit" class="btn btn-primary">Aplicar</button>
+    </form>
+    </div>
+
+    <!-- Control de ordenamiento -->
+    <div class="sort-control">
+      <span class="sort-label">Ordenar por precio:</span>
+      <a href="/api/products?limit={{currentLimit}}&page=1&sort=asc" class="btn-sort {{#ifEqual currentSort 'asc'}}active{{/ifEqual}}">
+        ↑
+      </a>
+      <a href="/api/products?limit={{currentLimit}}&page=1&sort=desc" class="btn-sort {{#ifEqual currentSort 'desc'}}active{{/ifEqual}}">
+        ↓
+      </a>
+    </div>
+  
+  {{#if products.length}}
+    <div class="products-grid">
+      {{#each products}}
+        <div class="product-card">
+          {{#if this.thumbnails}}
+            <div class="product-image">
+              <img src="{{this.thumbnails}}" alt="{{this.title}}" />
+            </div>
+          {{else}}
+            <div class="product-image no-image">
+              <span>Sin imagen</span>
+            </div>
+          {{/if}}
+          
+          <div class="product-body">
+            <h3 class="productName">{{this.title}}</h3>
+                        
+            <p class="productDescription">{{truncate this.description 100}}</p>
+            
+            <div class="product-meta">
+           
+              <div class="meta-item">
+                <span class="label">Precio:</span>
+                <span class="productPrice">${{this.price}}</span>
+              </div>
+             
+            </div>
+            
+            <div class="product-actions">
+              <a href="/api/products/{{this._id}}" class="btn btn-primary">
+                Ver Detalles
+              </a>
+              {{#if this.stock}}
+                <button 
+                  class="btn btn-success btn-add-quick" 
+                  data-product-id="{{this._id}}"
+                  data-product-title="{{this.title}}"
+                  data-product-price="{{this.price}}"
+                  data-product-stock="{{this.stock}}"
+                >
+                  🛒 Agregar
+                </button>
+              {{else}}
+                <button class="btn btn-disabled" disabled>Agotado</button>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+    
+    
+  {{else}}
+    <div class="no-products">
+      <p>No hay productos disponibles</p>
+    </div>
+  {{/if}}
+</div>
+
+<!-- Modal para confirmación de agregar al carrito -->
+<div id="modalAddCart" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Agregar al Carrito</h2>
+    <p>Producto: <strong id="modalProductName"></strong></p>
+    <div class="quantity-row">
+      <label for="modalQuantity">Cantidad:</label>
+      <input type="number" id="modalQuantity" value="1" min="1" />
+    </div>
+    <div class="modal-actions">
+      <button id="confirmAdd" class="btn btn-success">Confirmar</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .products-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 1rem;
+  }
+  
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .product-image {
+    width: 100%;
+    height: 150px;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .product-image.no-image {
+    background: #e9ecef;
+  }
+  
+  .product-image.no-image span {
+    color: #999;
+    font-size: 1rem;
+  }
+  
+  .product-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .productName {
+    font-size: 1.3rem;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .productCode {
+    font-size: 0.85rem;
+    color: #999;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  .productDescription {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0 0 1rem 0;
+    line-height: 1.4;
+    flex-grow: 1;
+  }
+  
+  .product-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: #f9f9f9;
+    border-radius: 4px;
+  }
+  
+  .meta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+  }
+  
+  .meta-item .label {
+    font-weight: 600;
+    color: #555;
+  }
+  
+  .productCategory {
+    display: inline-block;
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+  }
+  
+  .productPrice {
+    font-weight: 700;
+    color: #28a745;
+    font-size: 1.1rem;
+  }
+  
+  .productStock {
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.85rem;
+  }
+  
+  .productStock.available {
+    background: #d4edda;
+    color: #155724;
+  }
+  
+  .productStock.unavailable {
+    background: #f8d7da;
+    color: #721c24;
+  }
+  
+  .product-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background 0.3s ease;
+    flex: 1;
+  }
+  
+  .btn-primary {
+    background: #007bff;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background: #0056b3;
+  }
+  
+  .btn-success {
+    background: #28a745;
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background: #218838;
+  }
+  
+  .btn-add-quick {
+    flex: 0.8;
+  }
+  
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background: #5a6268;
+  }
+  
+  .btn-disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  }
+  
+  .no-products {
+    text-align: center;
+    padding: 3rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    color: #999;
+    font-size: 1.2rem;
+  }
+  
+  /* Paginación */
+  .pagination-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .pagination-info {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .pagination-info strong {
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .btn-page {
+    padding: 0.6rem 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+  }
+   
+  
+  .btn-page:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    color: #999;
+  }
+  
+  .page-numbers {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .page-number {
+    min-width: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #007bff;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .page-number:hover {
+    background: #007bff;
+    color: white;
+  }
+  
+  .page-number.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-content h2 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover {
+    color: #000;
+  }
+  
+  .quantity-row {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .quantity-row label {
+    font-weight: 600;
+  }
+  
+  .quantity-row input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .modal-actions .btn {
+    flex: 1;
+  }
+
+  .limit-control {
+  margin-bottom: 1rem;
+}
+
+.limit-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.limit-form label {
+  font-weight: 600;
+  color: #333;
+}
+
+.limit-form input {
+  width: 80px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.limit-form span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.sort-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-sort {
+  padding: 0.5rem 1.1rem;
+  border-radius: 4px;
+  border: 2px solid #007bff;
+  color: #007bff;
+  background: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-sort:hover {
+  background: #007bff;
+  color: white;
+}
+
+.btn-sort.active {
+  background: #007bff;
+  color: white;
+}
+  
+</style>
+
+<script>
+  // Funciones para manejar el modal y agregar al carrito
+  const modal = document.getElementById('modalAddCart');
+  const closeBtn = document.querySelector('.close');
+  let currentProductId = null;
+  
+  // Cerrar modal
+  function closeModal() {
+    modal.style.display = 'none';
+  }
+  
+  closeBtn.addEventListener('click', closeModal);
+  
+  window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+  
+  // Botones de agregar al carrito
+  document.querySelectorAll('.btn-add-quick').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      currentProductId = this.dataset.productId;
+      const stock = parseInt(this.dataset.productStock) || 1;
+      document.getElementById('modalProductName').textContent = this.dataset.productTitle;
+      document.getElementById('modalQuantity').value = 1;
+      document.getElementById('modalQuantity').max = stock;
+      modal.style.display = 'block';
+    });
+  });
+  
+  // Confirmar agregar al carrito
+  document.getElementById('confirmAdd').addEventListener('click', async function() {
+    const quantity = parseInt(document.getElementById('modalQuantity').value);
+    
+    if (quantity < 1) {
+      alert('Por favor selecciona una cantidad válida');
+      return;
+    }
+    
+    try {
+      // Obtener o crear carrito
+      let cartId = localStorage.getItem('cartId');
+      
+      if (!cartId) {
+        const cartResponse = await fetch('/api/carts', { method: 'POST' });
+        const cart = await cartResponse.json();
+        cartId = cart._id;
+        localStorage.setItem('cartId', cartId);
+      }
+      
+      // Agregar producto al carrito
+      const addResponse = await fetch(`/api/carts/${cartId}/product/${currentProductId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quantity })
+      });
+      
+      if (addResponse.ok) {
+        alert('¡Producto agregado al carrito!');
+        closeModal();
+      } else {
+        const error = await addResponse.json();
+        alert('Error: ' + (error.message || 'No se pudo agregar el producto'));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al agregar el producto al carrito');
+    }
+  });
+</script>
