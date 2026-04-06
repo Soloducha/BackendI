@@ -50,6 +50,42 @@ class CartRepository {
     }
   };
 
+  removeFromCart = async (cartId, productId) => {
+    try {
+      const cart = await this.model.findById(cartId);
+      if (!cart) {
+        throw new Error(`Carrito con ID ${cartId} no encontrado`);
+      }
+      cart.products = cart.products.filter(
+        (item) => item.product.toString() !== productId
+      );
+      await cart.save();
+      return cart;
+    } catch (error) {
+      throw new Error(`Error al eliminar producto del carrito: ${error.message}`);
+    }
+  };
+
+  updateQuantity = async (cartId, productId, quantity) => {
+    try {
+      const cart = await this.model.findById(cartId);
+      if (!cart) {
+        throw new Error(`Carrito con ID ${cartId} no encontrado`);
+      }
+      const productIndex = cart.products.findIndex(
+        (item) => item.product.toString() === productId
+      );
+      if (productIndex === -1) {
+        throw new Error(`Producto no encontrado en el carrito`);
+      }
+      cart.products[productIndex].quantity = Math.max(1, parseInt(quantity));
+      await cart.save();
+      return cart;
+    } catch (error) {
+      throw new Error(`Error al actualizar cantidad: ${error.message}`);
+    }
+  };
+
   delete = async (id) => {
     try {
       return await this.model.findByIdAndDelete(id);

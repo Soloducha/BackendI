@@ -18,32 +18,4 @@ router.get("/", async (req, res) => {
   });
 });
 
-// Ruta para ver detalle de un producto
-// router.get("/products/:pid", async (req, res) => {
-//   try {
-//     const product = await productService.getbyId(req.params.pid);
-//     res.render("product-detail", {
-//       title: product.title,
-//       code: product.code,
-//       price: product.price,
-//       description: product.description,
-//       category: product.category,
-//       thumbnail: product.thumbnail,
-//       stock: product.stock,
-//       status: product.status,
-//       _id: product._id,
-//     });
-//   } catch (error) {
-//     res.status(404).render("error", { error: "Producto no encontrado" });
-//   }
-// });
-
-router.get("/cart", (req, res) => {
-  const carts = cartService.getAll();
-  res.render("cart", {
-    title: "Carrito de compras",
-    carts: carts.docs,
-  });
-});
-
 export default router;

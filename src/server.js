@@ -21,15 +21,6 @@ app.use("/", viewsRouter); // Rutas para la vista principal
 // Configuración de Handlebars con helpers personalizados
 const hbsInstance = handlebars.create({
   helpers: {
-    // Helper para truncar texto
-    truncate: (text, length) => {
-      if (!text) return "";
-      text = text.toString();
-      if (text.length > length) {
-        return text.substring(0, length) + "...";
-      }
-      return text;
-    },
     // Helper para generar rango de números
     range: (start, end) => {
       const result = [];
@@ -45,6 +36,44 @@ const hbsInstance = handlebars.create({
       } else {
         return options.inverse(this);
       }
+    },
+    // Helper para multiplicar
+    multiply: (a, b) => {
+      return (a * b).toFixed(2);
+    },
+    // Helper para calcular subtotal en cart
+    subtotal: (items) => {
+      if (!items || items.length === 0) return "0.00";
+      const total = items.reduce((sum, item) => {
+        const price = item.product?.price || item.price || 0;
+        const quantity = item.quantity || 0;
+        return sum + price * quantity;
+      }, 0);
+      return total.toFixed(2);
+    },
+    // Helper para calcular impuestos (21% por defecto) en cart
+    tax: (items) => {
+      if (!items || items.length === 0) return "0.00";
+      const subtotal = items.reduce((sum, item) => {
+        const price = item.product?.price || item.price || 0;
+        const quantity = item.quantity || 0;
+        return sum + price * quantity;
+      }, 0);
+      const tax = subtotal * 0.21;
+      return tax.toFixed(2);
+    },
+    // Helper para calcular total en cart
+    total: (items) => {
+      if (!items || items.length === 0) return "0.00";
+      const subtotal = items.reduce((sum, item) => {
+        const price = item.product?.price || item.price || 0;
+        const quantity = item.quantity || 0;
+        return sum + price * quantity;
+      }, 0);
+      const tax = subtotal * 0.21;
+      const shipping = subtotal >= 5000 ? 0 : 300;
+      const total = subtotal + tax + shipping;
+      return total.toFixed(2);
     },
   },
 });

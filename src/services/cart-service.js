@@ -43,6 +43,28 @@ class CartService {
     }
   };
 
+  removeFromCart = async (cartId, productId) => {
+    try {
+      const response = await this.repository.removeFromCart(cartId, productId);
+      if (!response)
+        throw new Error(`No se pudo eliminar el producto del carrito`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  updateQuantity = async (cartId, productId, quantity) => {
+    try {
+      const response = await this.repository.updateQuantity(cartId, productId, quantity);
+      if (!response)
+        throw new Error(`No se pudo actualizar la cantidad`);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   delete = async (id) => {
     try {
       const response = await this.repository.delete(id);
