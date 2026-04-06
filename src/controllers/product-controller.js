@@ -1,4 +1,5 @@
 import { productService } from "../services/product-service.js";
+import { cartService } from "../services/cart-service.js";
 
 class ProductController {
   constructor(service) {
@@ -34,7 +35,12 @@ class ProductController {
         prevParams.set("page", products.prevPage.toString());
         urlprev = `${baseUrl}api/products?${prevParams.toString()}`;
       }
-      console.log("pagina:", products.page);
+
+      // Obtener cartId antes del render
+      let carts = await cartService.getAll();
+      if (!carts || carts.length === 0) carts = [await cartService.create()];
+      const cartId = carts[0]._id;
+
       res.render("products", {
         title: "Productos",
         products: products.docs,
@@ -46,6 +52,7 @@ class ProductController {
         prevPage: urlprev,
         currentLimit: currentLimit,
         currentSort: currentSort,
+        cartId, // Pasar cartId a la vista para el navbar
       });
     } catch (error) {
       next(error);
@@ -55,7 +62,12 @@ class ProductController {
   getbyId = async (req, res, next) => {
     try {
       const product = await productService.getbyId(req.params.pid);
-      console.log("Producto obtenido en Controller:", product);
+
+      // Obtener cartId antes del render
+      let carts = await cartService.getAll();
+      if (!carts || carts.length === 0) carts = [await cartService.create()];
+      const cartId = carts[0]._id;
+
       res.render("product-detail", {
         title: product.title,
         code: product.code,
@@ -66,6 +78,7 @@ class ProductController {
         stock: product.stock,
         status: product.status,
         _id: product._id,
+        cartId, // Pasar cartId a la vista para el navbar
       });
     } catch (error) {
       next(error);

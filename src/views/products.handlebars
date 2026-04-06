@@ -563,14 +563,7 @@
       }
 
       try {
-        let cartId = localStorage.getItem('cartId');
-
-        if (!cartId) {
-          const cartResponse = await fetch('/api/carts', { method: 'POST' });
-          const cart = await cartResponse.json();
-          cartId = cart._id;
-          localStorage.setItem('cartId', cartId);
-        }
+        const cartId = '{{cartId}}' || localStorage.getItem('cartId');
 
         const addResponse = await fetch(`/api/carts/${cartId}/product/${productId}`, {
           method: 'POST',

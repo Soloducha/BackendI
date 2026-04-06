@@ -12,9 +12,18 @@ router.get("/", async (req, res) => {
     page: 1,
     sort: "asc",
   });
+
+  // Obtener o crear el carrito
+  let carts = await cartService.getAll();
+  if (!carts || carts.length === 0) {
+    carts = [await cartService.create()];
+  }
+  const cartId = carts[0]._id;
+
   res.render("home", {
     title: "Bienvenido a la tienda",
     products: products.docs,
+    cartId, //se lo pasamos a la vista para que el navbar pueda usarlo de una
   });
 });
 

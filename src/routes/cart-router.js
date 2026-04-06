@@ -4,7 +4,7 @@ import { cartController } from "../controllers/cart-controller.js";
 const router = Router();
 //Rutas para Carts//
 //listo todos los carts
-// router.get("/", cartController.getAll);
+router.get("/", cartController.getAll);
 
 //listo un cart por su id
 router.get("/:cid", cartController.getbyId);
@@ -20,8 +20,6 @@ router.put("/:cid/product/:pid", cartController.updateQuantity);
 
 //elimino un producto del carrito
 router.delete("/:cid/product/:pid", cartController.removeFromCart);
-
-router.get("/", cartController.getAll);
 
 router.delete("/:id", cartController.delete);
 

@@ -34,7 +34,11 @@ class CartService {
 
   addtoCart = async (cartId, productId, quantity = 1) => {
     try {
-      const response = await this.repository.addtoCart(cartId, productId, quantity);
+      const response = await this.repository.addtoCart(
+        cartId,
+        productId,
+        quantity,
+      );
       if (!response)
         throw new Error(`No se pudo agregar el producto al carrito`);
       return response;
@@ -56,9 +60,12 @@ class CartService {
 
   updateQuantity = async (cartId, productId, quantity) => {
     try {
-      const response = await this.repository.updateQuantity(cartId, productId, quantity);
-      if (!response)
-        throw new Error(`No se pudo actualizar la cantidad`);
+      const response = await this.repository.updateQuantity(
+        cartId,
+        productId,
+        quantity,
+      );
+      if (!response) throw new Error(`No se pudo actualizar la cantidad`);
       return response;
     } catch (error) {
       throw error;
