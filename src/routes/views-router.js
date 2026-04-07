@@ -8,7 +8,7 @@ const router = Router();
 // Rutas para la vista principal
 router.get("/", async (req, res) => {
   const products = await productService.getAll({
-    limit: 10,
+    limit: 100,
     page: 1,
     sort: "asc",
   });

@@ -21,7 +21,7 @@ Proyecto final del curso **Backend I** de CoderHouse. API REST para gestión de 
 **1. Clonar el repositorio**
 
 ```bash
-git clone <url-del-repo>
+git clone https://github.com/Soloducha/BackendI.git
 cd entrega-soloducha
 ```
 
@@ -58,7 +58,7 @@ El servidor corre en **http://localhost:8080**
 ```
 src/
 ├── config/
-│   └── db-connection.js       # Conexión a MongoDB
+│   └── db-connection.js
 ├── controllers/
 │   ├── product-controller.js
 │   └── cart-controller.js
@@ -84,6 +84,7 @@ src/
 │   ├── product-detail.handlebars
 │   └── cart.handlebars
 ├── public/
+│   └── images/
 └── server.js
 ```
 

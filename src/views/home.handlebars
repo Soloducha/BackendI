@@ -1,65 +1,89 @@
 <h1 class="title">Lista de Productos</h1>
-{{#each products}}
-  <div class="product">
-    <h2 class="productName">{{this.title}}</h2>
-    <p class="productDescription">Descripcion: {{this.description}}</p>
-    <p class="productCode">Codigo: {{this.code}}</p>
-    <p class="productPrice">Precio: ${{this.price}}</p>
-    <p class="productStatus">Status: {{this.status}}</p>
-    <p class="productStock">Stock: {{this.stock}}</p>
-    <p class="productCategory">Categoria: {{this.category}}</p>
-  </div>
-{{/each}}
+
+<div class="product-list">
+  {{#each products}}
+    <div class="product-item">
+      <div class="main">
+        <span class="name">{{this.title}}</span>
+        <span class="price">${{this.price}}</span>
+      </div>
+
+      <div class="secondary">
+        <span>Desc: {{this.description}}</span>
+        <span>Cod: {{this.code}}</span>
+        <span>Stock: {{this.stock}}</span>
+        <span>{{this.category}}</span>
+        <span class="status {{this.status}}">
+          status:
+          {{this.status}}
+        </span>
+      </div>
+    </div>
+  {{/each}}
+</div>
 
 <style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+  }
+
   .title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: black;
+    font-size: 1.8rem;
+    margin: 1.5rem;
+    color: #333;
   }
 
-  .product {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    margin-bottom: 0.5rem;
-    width: 400px;
-    text-items: center;
+  .product-list {
+    width: 80%;
+    margin: auto;
   }
 
-  .productName {
-    font-size: 1.5rem;
+  .product-item {
+    background: #fff;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .product-item:hover {
+    background: #f0f0f0;
+  }
+
+  .main {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
     margin-bottom: 0.2rem;
-    color: black;
   }
 
-  .productDescription {
-    font-size: 1rem;
-    color: black;
+  .name {
+    color: #222;
   }
 
-  .productCode {
-    font-size: 1rem;
-    color: gray;
+  .price {
+    color: #2ecc71;
   }
 
-  .productPrice {
-    font-size: 1rem;
-    color: green;
+  .secondary {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    gap: 1rem;
   }
 
-  .productStatus {
-    font-size: 1rem;
-    color: blue;
+  .status {
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
   }
 
-  .productStock {
-    font-size: 1rem;
-    color: orange;
+  .status.true {
+    background: #d4edda;
+    color: #155724;
   }
 
-  .productCategory {
-    font-size: 1rem;
-    color: purple;
-    margin-bottom: 0.2rem;
+  .status.false {
+    background: #f8d7da;
+    color: #721c24;
   }
 </style>
