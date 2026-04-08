@@ -74,7 +74,7 @@ class ProductController {
         price: product.price,
         description: product.description,
         category: product.category,
-        thumbnail: product.thumbnail,
+        thumbnail: product.thumbnails,
         stock: product.stock,
         status: product.status,
         _id: product._id,
